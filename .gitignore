@@ -5,3 +5,7 @@ credentials.json
 token.json
 
 *.pyc
+
+.venv
+
+.env
