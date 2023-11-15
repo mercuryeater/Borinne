@@ -26,6 +26,10 @@ def post_image():
     path = os.path.join(os.path.dirname(__file__), 'tempImages', img.filename)
     # print(f'esto es el path de la imagen normal: {path}')
 
+    # Aqui va la evaluacion del modelo para saber que hacer con la imagen
+    # try:
+        
+
     try:
         uploadImage(path)
     except Exception as e:
