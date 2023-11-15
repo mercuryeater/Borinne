@@ -1,8 +1,8 @@
 import os
 
-import tempfile
 from flask import Flask, request, jsonify
 from google_drive_auth import uploadImage
+from predict_app import categorize
 
 
 app = Flask(__name__)
@@ -24,19 +24,36 @@ def post_image():
     img.save(os.path.join(os.path.dirname(__file__), 'tempImages', img.filename))
 
     path = os.path.join(os.path.dirname(__file__), 'tempImages', img.filename)
-    # print(f'esto es el path de la imagen normal: {path}')
 
     # Aqui va la evaluacion del modelo para saber que hacer con la imagen
-    # try:
-        
-
     try:
-        uploadImage(path)
-    except Exception as e:
-        print(f"Ocurrió un error al subir la imagen: {e}")
-        return jsonify({"message": str(e)})
+        result = categorize(path)
 
-    return jsonify({'message': 'Imagen recibida correctamente'}), 200
+        if result == 0:
+            try:
+                uploadImage(path)
+            except Exception as e:
+                print(f"Ocurrió un error al subir la imagen: {e}")
+                return jsonify({"message": str(e)})
+
+            os.remove(path)
+            return jsonify({'message': 'Imagen de Bob recibida correctamente', 'value': int(result)}), 200
+        elif result == 1:
+            try:
+                uploadImage(path)
+            except Exception as e:
+                print(f"Ocurrió un error al subir la imagen: {e}")
+                return jsonify({"message": str(e)})
+
+            os.remove(path)
+            return jsonify({'message': 'Imagen de Corinne recibida correctamente', 'value': int(result)}), 200
+        elif result == 2:
+            os.remove(path)
+            return jsonify({'message': 'No hay gatos en la imagen', 'value': int(result)}), 200
+        else:
+            return "Resultado desconocido"
+    except Exception as e:
+        print(f'Error: {e}')
 
 
 app.run(host="0.0.0.0", port=80)

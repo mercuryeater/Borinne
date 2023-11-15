@@ -5,9 +5,8 @@ import cv2
 import numpy as np
 
 
-
 loaded_model = tf.keras.models.load_model('BorinneV1.h5', custom_objects={
-                          'KerasLayer': hub.KerasLayer})
+    'KerasLayer': hub.KerasLayer})
 
 
 def categorize(path):
@@ -25,9 +24,3 @@ def categorize(path):
 
     prediction = loaded_model.predict(img.reshape(-1, 224, 224, 3))
     return np.argmax(prediction[0], axis=-1)
-
-
-path = "c.jpg"
-
-prediction = categorize(path)
-print(prediction)
