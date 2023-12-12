@@ -4,6 +4,8 @@ credentials.json
 
 token.json
 
+byte_array.py
+
 *.pyc
 
 .venv

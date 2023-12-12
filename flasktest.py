@@ -56,4 +56,12 @@ def post_image():
         print(f'Error: {e}')
 
 
+@app.route("/test", methods=["POST"])
+def test():
+    print("Test")
+    print(request.data)
+
+    return jsonify({'message': 'data received'}), 200
+
+
 app.run(host="0.0.0.0", port=80)
