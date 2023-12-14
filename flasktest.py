@@ -3,6 +3,7 @@ import os
 from flask import Flask, request, jsonify
 from google_drive_auth import uploadImage
 from predict_app import categorize
+from binaryHandling import octetToImage
 
 
 app = Flask(__name__)
@@ -19,9 +20,19 @@ def post_image():
         return jsonify({'error': 'No image part in the request'}), 400
 
     img = request.files['image']
-    # Aquí puedes procesar la imagen como desees
-    # Por ejemplo, podrías guardarla en un archivo:
-    img.save(os.path.join(os.path.dirname(__file__), 'tempImages', img.filename))
+
+    # Define el directorio de las imágenes
+    image_dir = os.path.join(os.path.dirname(__file__), 'tempImages')
+
+    # Verifica si el directorio existe, si no, créalo
+    if not os.path.exists(image_dir):
+        os.makedirs(image_dir)
+
+    try:
+        img.save(os.path.join(os.path.dirname(
+            __file__), 'tempImages', img.filename))
+    except Exception as e:
+        print(f"Ocurrió un error al guardar la imagen: {e}")
 
     path = os.path.join(os.path.dirname(__file__), 'tempImages', img.filename)
 
@@ -60,6 +71,8 @@ def post_image():
 def test():
     print("Test")
     print(request.data)
+
+    octetToImage(request.data)
 
     return jsonify({'message': 'data received'}), 200
 
