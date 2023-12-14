@@ -23,6 +23,6 @@ def octetToImage(binaryData):
         with open(file_path, 'wb') as f:
             f.write(binaryData)
         print(f"Imagen guardada exitosamente en {file_path}")
-        return f"Se guardo la imagen correctamente como {file_name}"
+        return file_path
     except Exception as e:
         print(f"Ocurrió un error al guardar la imagen: {e}")

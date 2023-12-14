@@ -8,35 +8,30 @@ from binaryHandling import octetToImage
 
 app = Flask(__name__)
 
+################################
+# TO DO:
+#
+# Create a finally that althought the image is not uploaded the message saying image processed is sent
+# and probably organize even more this code, it is still too spaghetti
+#
+# I need to work on the model to recognize in worse conditions with worse type of images, similar background
+# and worse light because it does not recognize Bob or it mistakenly classifies him as Corinne
+#
+# Also check what I'm returning so that can trigger another ESP32 device to drive Bob off or whatever
+
 
 @app.route("/")
 def index():
     return "Drink more coffee!"
 
 
-@app.route("/upload", methods=["POST"])
-def post_image():
-    if 'image' not in request.files:
-        return jsonify({'error': 'No image part in the request'}), 400
+@app.route("/test", methods=["POST"])
+def test():
+    print("Test")
+    print(request.data)
 
-    img = request.files['image']
+    path = octetToImage(request.data)
 
-    # Define el directorio de las imágenes
-    image_dir = os.path.join(os.path.dirname(__file__), 'tempImages')
-
-    # Verifica si el directorio existe, si no, créalo
-    if not os.path.exists(image_dir):
-        os.makedirs(image_dir)
-
-    try:
-        img.save(os.path.join(os.path.dirname(
-            __file__), 'tempImages', img.filename))
-    except Exception as e:
-        print(f"Ocurrió un error al guardar la imagen: {e}")
-
-    path = os.path.join(os.path.dirname(__file__), 'tempImages', img.filename)
-
-    # Aqui va la evaluacion del modelo para saber que hacer con la imagen
     try:
         result = categorize(path)
 
@@ -48,6 +43,7 @@ def post_image():
                 return jsonify({"message": str(e)})
 
             os.remove(path)
+            print('Imagen de Bob recibida correctamente')
             return jsonify({'message': 'Imagen de Bob recibida correctamente', 'value': int(result)}), 200
         elif result == 1:
             try:
@@ -57,6 +53,7 @@ def post_image():
                 return jsonify({"message": str(e)})
 
             os.remove(path)
+            print('Imagen de Corinne recibida correctamente')
             return jsonify({'message': 'Imagen de Corinne recibida correctamente', 'value': int(result)}), 200
         elif result == 2:
             os.remove(path)
@@ -65,14 +62,6 @@ def post_image():
             return "Resultado desconocido"
     except Exception as e:
         print(f'Error: {e}')
-
-
-@app.route("/test", methods=["POST"])
-def test():
-    print("Test")
-    print(request.data)
-
-    octetToImage(request.data)
 
     return jsonify({'message': 'data received'}), 200
 
