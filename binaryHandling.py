@@ -14,7 +14,7 @@ def octetToImage(binaryData):
         os.makedirs(image_dir)
 
     current_time = datetime.now()
-    file_name = current_time.strftime("%Y-%m-%d %H:%M:%S")
+    file_name = current_time.strftime("%Y-%m-%d__%H_%M_%S") + ".jpg"
 
     # Define the full file path
     file_path = os.path.join(image_dir, file_name)
