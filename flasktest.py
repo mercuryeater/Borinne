@@ -1,5 +1,4 @@
 import os
-
 from flask import Flask, request, jsonify
 from google_drive_auth import uploadImage
 from predict_app import categorize
@@ -27,8 +26,6 @@ def index():
 
 @app.route("/test", methods=["POST"])
 def test():
-    print("Test")
-    print(request.data)
 
     path = octetToImage(request.data)
 

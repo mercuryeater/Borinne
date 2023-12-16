@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 
 
-loaded_model = tf.keras.models.load_model('BorinneV1.h5', custom_objects={
+loaded_model = tf.keras.models.load_model('BorinneV2.h5', custom_objects={
     'KerasLayer': hub.KerasLayer})
 
 
