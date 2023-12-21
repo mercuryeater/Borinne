@@ -16,7 +16,8 @@ SCOPES = ["https://www.googleapis.com/auth/drive.file"]
 
 folder_ID = os.getenv("FOLDER_ID")
 
-def uploadImage(image_path):
+
+def uploadImage(image_path, result):
     """Shows basic usage of the Drive v3 API.
     Prints the names and ids of the first 10 files the user has access to.
     """
@@ -41,13 +42,20 @@ def uploadImage(image_path):
 
     # Now we upload/create the image in drive
     try:
+        # Call the Drive v3 API
         service = build("drive", "v3", credentials=creds)
 
         current_time = datetime.now()
 
-        # Call the Drive v3 API
+        # naming the file based on result and timestamp
+        if result == 0:
+
+            prefix = 'Bob'
+        else:  # result es 1
+            prefix = 'Corinne'
+
         file_metadata = {
-            'name': current_time.strftime("%Y-%m-%d %H:%M:%S"),
+            'name': f"{prefix}__{current_time.strftime('%Y-%m-%d__%H:%M:%S')}",
             'parents': [folder_ID]
         }
 

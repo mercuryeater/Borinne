@@ -37,15 +37,15 @@ def test():
 
         if result in [0, 1]:
             try:
-                uploadImage(path)
+                uploadImage(path, result)
             except Exception as e:
                 print(f"Ocurrió un error al subir la imagen: {e}")
             finally:
-                os.remove(path)
+                # os.remove(path)
                 print(messages[result])
                 return jsonify({'message': messages[result], 'value': int(result)}), 200
         elif result == 2:
-            os.remove(path)
+            # os.remove(path)
             return jsonify({'message': messages[result], 'value': int(result)}), 200
         else:
             return "Resultado desconocido"
