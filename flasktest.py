@@ -51,6 +51,7 @@ def test():
             return "Resultado desconocido"
     except Exception as e:
         print(f'Error: {e}')
+        return f'Error: {e}'
 
 
 app.run(host="0.0.0.0", port=80)

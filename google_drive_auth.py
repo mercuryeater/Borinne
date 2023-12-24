@@ -55,7 +55,7 @@ def uploadImage(image_path, result):
             prefix = 'Corinne'
 
         file_metadata = {
-            'name': f"{prefix}__{current_time.strftime('%Y-%m-%d__%H:%M:%S')}",
+            'name': f"{prefix}__{current_time.strftime('%d-%m-%Y__%H:%M:%S')}",
             'parents': [folder_ID]
         }
 
